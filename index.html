@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sorteador de Palavras em Francês</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            display: flex;
+            gap: 30px;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            max-width: 800px;
+            width: 90%;
+        }
+
+        .painel-principal {
+            flex: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-right: 2px solid #eee;
+            padding-right: 20px;
+        }
+
+        .palavra-sorteada {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #1a73e8;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 20px 0;
+            word-break: break-word;
+        }
+
+        button {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        button:hover {
+            background-color: #1557b0;
+        }
+
+        button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        .painel-historico {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 200px;
+        }
+
+        .painel-historico h3 {
+            margin-top: 0;
+            color: #555;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 8px;
+        }
+
+        .lista-sorteadas {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .lista-sorteadas li {
+            padding: 6px 10px;
+            border-bottom: 1px solid #f1f1f1;
+            color: #666;
+            font-size: 0.95rem;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Sorteador de Francês</h1>
+
+    <div class="container">
+        <div class="painel-principal">
+            <div class="palavra-sorteada" id="displayPalavra">Clique para Sortear</div>
+            <button id="btnSortear" onclick="sortearPalavra()">Sortear Palavra</button>
+        </div>
+
+        <div class="painel-historico">
+            <h3>Já sorteadas:</h3>
+            <ul class="lista-sorteadas" id="listaHistorico">
+                </ul>
+        </div>
+    </div>
+
+    <script>
+        // Lista apenas com as versões em francês fornecidas
+        const palavrasDisponiveis = [
+            "LA SALLE DE CLASSE", "LA RÉCRÉATION", "PENDANT", "LA COUR", "JOUER", 
+            "LE SAC À DOS", "DERRIÈRE", "LE CAHIER", "LA TROUSSE", "LE STYLO", 
+            "LE CRAYON", "LA GOMME", "LE TAILLE-CRAYON", "LES CISEAUX", "LE FEUTRE", 
+            "LE SURLIGNEUR", "LA FEUILLE", "LE CLASSEUR", "LE CRAYON DE CIRE", "LE TABLEAU", 
+            "LA CRAIE", "L'ORDINATEUR", "LA CANTINE", "LE GYMNASE", "LA SALLE DES MAÎTRES", 
+            "LES TOILETTES", "LA FILLE", "LE GARÇON", "CHAQUE", "AVEC", "PARFOIS"
+        ];
+
+        const sorteadas = [];
+
+        function sortearPalavra() {
+            const display = document.getElementById('displayPalavra');
+            const lista = document.getElementById('listaHistorico');
+            const botao = document.getElementById('btnSortear');
+
+            // Filtrar palavras que ainda não foram sorteadas
+            const Restantes = palavrasDisponiveis.filter(p => !sorteadas.includes(p));
+
+            if (Restantes.length === 0) {
+                display.innerText = "Fim do sorteio!";
+                display.style.color = "#dc3545";
+                botao.disabled = true;
+                return;
+            }
+
+            // Escolhe um índice aleatório dentro das que restaram
+            const indiceAleatorio = Math.floor(Math.random() * Restantes.length);
+            const palavraEscolhida = Restantes[indiceAleatorio];
+
+            // Adiciona ao array de sorteadas
+            sorteadas.push(palavraEscolhida);
+
+            // Atualiza a tela com a palavra grande
+            display.innerText = palavraEscolhida;
+
+            // Adiciona a palavra ao quadro lateral de histórico
+            const itemLista = document.createElement('li');
+            itemLista.innerText = palavraEscolhida;
+            lista.appendChild(itemLista);
+            
+            // Rola o histórico automaticamente para o último item
+            lista.scrollTop = lista.scrollHeight;
+        }
+    </script>
+
+</body>
+</html>
